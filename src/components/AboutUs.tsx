@@ -31,8 +31,8 @@ const AboutUs = () => {
 
           <p className={`hero-body ${visible ? "show" : ""}`}>
             Capturamos cada emoción, cada detalle, para que cada recuerdo sea
-            inolvidable. Nuestra pasión es convertir instantes en piezas
-            únicas que perduren para siempre.
+            inolvidable. Nuestra pasión es convertir instantes en piezas únicas
+            que perduren para siempre.
           </p>
 
           <div className={`hero-cta-row ${visible ? "show" : ""}`}>

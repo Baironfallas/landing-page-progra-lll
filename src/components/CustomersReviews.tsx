@@ -79,7 +79,7 @@ const CustomersReviews = () => {
         className="pointer-events-none absolute inset-0 z-[1] opacity-40"
         style={{
           backgroundImage:
-            'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 200 200\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'n\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23n)\' opacity=\'0.04\'/%3E%3C/svg%3E")',
+            "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E\")",
         }}
       />
 
@@ -102,7 +102,8 @@ const CustomersReviews = () => {
             className="text-4xl md:text-5xl font-light text-white leading-tight"
             style={{ fontFamily: "'Cormorant Garamond', serif" }}
           >
-            Lo que dicen <em className="italic text-white/70">nuestros clientes</em>
+            Lo que dicen{" "}
+            <em className="italic text-white/70">nuestros clientes</em>
           </h2>
           <p className="mt-4 text-sm text-white/35 max-w-md mx-auto leading-relaxed">
             La confianza de quienes nos eligen es nuestro mayor reconocimiento.
@@ -179,10 +180,12 @@ const CustomersReviews = () => {
               </div>
 
               {/* Corner decorations */}
-              <div className="absolute bottom-3 right-3 w-6 h-6 pointer-events-none
+              <div
+                className="absolute bottom-3 right-3 w-6 h-6 pointer-events-none
                 border-b border-r border-white/0
                 transition-all duration-500
-                group-hover:border-white/15 group-hover:w-8 group-hover:h-8" />
+                group-hover:border-white/15 group-hover:w-8 group-hover:h-8"
+              />
             </article>
           ))}
         </div>

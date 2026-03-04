@@ -13,7 +13,8 @@ const Contact = () => {
             className="text-4xl md:text-5xl font-light text-white leading-tight"
             style={{ fontFamily: "'Cormorant Garamond', serif" }}
           >
-            Hablemos de tu <em className="italic text-white/70">próximo proyecto</em>
+            Hablemos de tu{" "}
+            <em className="italic text-white/70">próximo proyecto</em>
           </h2>
           <div className="w-12 h-px bg-white/20 mx-auto mt-6" />
         </div>
@@ -39,7 +40,10 @@ const Contact = () => {
                 <div className="w-10 h-10 flex items-center justify-center rounded-full border border-white/10 group-hover:border-white/30 transition-colors duration-300">
                   <FaEnvelope className="w-4 h-4" />
                 </div>
-                <span className="text-sm" style={{ fontFamily: "'Montserrat', sans-serif" }}>
+                <span
+                  className="text-sm"
+                  style={{ fontFamily: "'Montserrat', sans-serif" }}
+                >
                   contacto@snapsy.com
                 </span>
               </a>
@@ -52,7 +56,10 @@ const Contact = () => {
                 <div className="w-10 h-10 flex items-center justify-center rounded-full border border-white/10 group-hover:border-white/30 transition-colors duration-300">
                   <FaPhone className="w-4 h-4" />
                 </div>
-                <span className="text-sm" style={{ fontFamily: "'Montserrat', sans-serif" }}>
+                <span
+                  className="text-sm"
+                  style={{ fontFamily: "'Montserrat', sans-serif" }}
+                >
                   +506 1234 5678
                 </span>
               </a>
@@ -62,7 +69,10 @@ const Contact = () => {
                 <div className="w-10 h-10 flex items-center justify-center rounded-full border border-white/10">
                   <FaMapMarkerAlt className="w-4 h-4" />
                 </div>
-                <span className="text-sm" style={{ fontFamily: "'Montserrat', sans-serif" }}>
+                <span
+                  className="text-sm"
+                  style={{ fontFamily: "'Montserrat', sans-serif" }}
+                >
                   San José, Costa Rica
                 </span>
               </div>

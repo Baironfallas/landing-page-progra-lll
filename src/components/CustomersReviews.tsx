@@ -1,54 +1,193 @@
+import { useEffect, useRef, useState } from "react";
+import { FaStar, FaQuoteLeft } from "react-icons/fa";
+
+type Review = {
+  name: string;
+  text: string;
+  avatar: string;
+  role?: string;
+  rating: number;
+};
+
+const reviews: Review[] = [
+  {
+    name: "Fio Barrantes",
+    role: "Evento",
+    text: "Estoy encantado con el trabajo realizado. Capturaron cada detalle y emoción de nuestro evento. ¡Las fotos son espectaculares!",
+    avatar: "https://i.ibb.co/YjjdBWB/d2d1b83f9aeb282efe4d510a18fe6657.jpg",
+    rating: 5,
+  },
+  {
+    name: "Bairon Fallas",
+    role: "Sesión",
+    text: "Las imágenes superaron todas mis expectativas. La atención al detalle y la creatividad hacen que cada foto sea única.",
+    avatar: "https://i.ibb.co/x8R4xfF/bf1e96ab228573b5f14cca020f781bad.jpg",
+    rating: 5,
+  },
+  {
+    name: "Levi Baltodano",
+    role: "Retratos",
+    text: "La mejor experiencia con un fotógrafo. Supo guiarnos y hacer que nos sintiéramos cómodos. Las fotos son simplemente hermosas.",
+    avatar: "https://i.ibb.co/mcDHVG8/6415993e7dc60fd63bd21043ef4f9ebf.jpg",
+    rating: 5,
+  },
+];
+
+const Stars = ({ rating }: { rating: number }) => (
+  <div className="flex items-center gap-[3px]">
+    {Array.from({ length: 5 }).map((_, i) => (
+      <FaStar
+        key={i}
+        className={[
+          "h-3 w-3",
+          i < rating ? "text-white/70" : "text-white/10",
+        ].join(" ")}
+      />
+    ))}
+  </div>
+);
+
 const CustomersReviews = () => {
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    if (!sectionRef.current) return;
+
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setShow(true);
+          obs.disconnect();
+        }
+      },
+      { threshold: 0.15 },
+    );
+
+    obs.observe(sectionRef.current);
+    return () => obs.disconnect();
+  }, []);
+
   return (
-    <div>
-      <section className="bg-black pt-12 pb-12 text-white">
-        <div className="flex items-center gap-2 flex-row-reverse">
-          <hr className="w-64 border-gray-500" />
-          <h2 className="text-xl font-bold text-white">Customer Reviews</h2>
+    <section
+      ref={sectionRef}
+      className="relative bg-[#050505] overflow-hidden"
+      style={{ fontFamily: "'Montserrat', sans-serif" }}
+    >
+      {/* Noise overlay */}
+      <div
+        className="pointer-events-none absolute inset-0 z-[1] opacity-40"
+        style={{
+          backgroundImage:
+            'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 200 200\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'n\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23n)\' opacity=\'0.04\'/%3E%3C/svg%3E")',
+        }}
+      />
+
+      {/* Ambient glow */}
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute left-1/2 bottom-0 h-96 w-[50rem] -translate-x-1/2 rounded-full bg-white/[0.025] blur-[100px]" />
+      </div>
+
+      <div className="relative z-[2] mx-auto max-w-7xl px-6 py-24 md:py-28">
+        {/* Section header */}
+        <div className="mb-16 text-center">
+          <div className="flex items-center justify-center gap-4 mb-5">
+            <div className="h-px w-10 bg-white/30" />
+            <span className="text-[0.65rem] font-medium uppercase tracking-[0.25em] text-white/40">
+              Testimonios
+            </span>
+            <div className="h-px w-10 bg-white/30" />
+          </div>
+          <h2
+            className="text-4xl md:text-5xl font-light text-white leading-tight"
+            style={{ fontFamily: "'Cormorant Garamond', serif" }}
+          >
+            Lo que dicen <em className="italic text-white/70">nuestros clientes</em>
+          </h2>
+          <p className="mt-4 text-sm text-white/35 max-w-md mx-auto leading-relaxed">
+            La confianza de quienes nos eligen es nuestro mayor reconocimiento.
+          </p>
+          <div className="w-12 h-px bg-white/20 mx-auto mt-6" />
         </div>
-        <div className="flex justify-center items-center pt-6 gap-16 lg:gap-8 md:gap-12 md:flex-wrap">
-          <div className="flex flex-col justify-center items-center w-72 h-76 gap-2 p-4 border rounded-xl border-solid border-inherit">
-            <img
-              src="https://i.ibb.co/YjjdBWB/d2d1b83f9aeb282efe4d510a18fe6657.jpg"
-              alt=""
-              className="w-20 h-20 rounded-full mt-2"
-            />
-            <h2>Fio Barrantes</h2>
-            <p className="text-center">
-              Estoy encantado con el trabajo realizado. Capturaron cada detalle
-              y emoción de nuestro evento. ¡Las fotos son espectaculares!
-            </p>
-            <p>⭐⭐⭐⭐⭐</p>
-          </div>
-          <div className="flex flex-col justify-center items-center w-72 h-76 gap-2 p-4 border rounded-xl border-solid border-inherit">
-            <img
-              src="https://i.ibb.co/x8R4xfF/bf1e96ab228573b5f14cca020f781bad.jpg"
-              alt=""
-              className="w-20 h-20 rounded-full mt-2"
-            />
-            <h2>Bairon Fallas</h2>
-            <p className="text-center">
-              Las imágenes superaron todas mis expectativas. La atención al
-              detalle y la creatividad hacen que cada foto sea única.
-            </p>
-            <p>⭐⭐⭐⭐⭐</p>
-          </div>
-          <div className="flex flex-col justify-center items-center w-72 h-76 gap-2 p-4 border rounded-xl border-solid border-inherit">
-            <img
-              src="https://i.ibb.co/mcDHVG8/6415993e7dc60fd63bd21043ef4f9ebf.jpg"
-              alt=""
-              className="w-20 h-20 rounded-full mt-2"
-            />
-            <h2>Levi Baltodano</h2>
-            <p className="text-center">
-              La mejor experiencia con un fotógrafo. Supo guiarnos y hacer que
-              nos sintiéramos cómodos. Las fotos son simplemente hermosas.
-            </p>
-            <p>⭐⭐⭐⭐⭐</p>
-          </div>
+
+        {/* Reviews grid */}
+        <div
+          className={[
+            "grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8",
+            "transition-all duration-1000 ease-out",
+            show ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10",
+          ].join(" ")}
+        >
+          {reviews.map((r, idx) => (
+            <article
+              key={r.name}
+              className="group relative overflow-hidden border border-white/[0.08] bg-white/[0.02]
+                backdrop-blur-sm p-8 md:p-10
+                transition-all duration-500
+                hover:border-white/15 hover:bg-white/[0.04]"
+              style={{ transitionDelay: `${idx * 150}ms` }}
+            >
+              {/* Top accent line */}
+              <div className="absolute top-0 left-0 right-full h-px bg-white/60 transition-all duration-500 ease-out group-hover:right-0" />
+
+              {/* Quote icon */}
+              <FaQuoteLeft className="h-5 w-5 text-white/[0.07] mb-6" />
+
+              {/* Review text */}
+              <p className="text-sm leading-[1.9] text-white/45 font-light tracking-wide mb-8">
+                "{r.text}"
+              </p>
+
+              {/* Stars */}
+              <div className="mb-6">
+                <Stars rating={r.rating} />
+              </div>
+
+              {/* Divider */}
+              <div className="h-px w-full bg-white/[0.07] mb-6 transition-colors duration-300 group-hover:bg-white/[0.12]" />
+
+              {/* Author */}
+              <div className="flex items-center gap-4">
+                <div className="relative">
+                  <img
+                    src={r.avatar}
+                    alt={r.name}
+                    className="h-12 w-12 rounded-full object-cover
+                      filter grayscale-[30%] contrast-[1.05]
+                      ring-1 ring-white/10
+                      transition-all duration-500
+                      group-hover:grayscale-0 group-hover:ring-white/25"
+                    loading="lazy"
+                  />
+                </div>
+                <div>
+                  <h3
+                    className="text-base font-light text-white/90"
+                    style={{ fontFamily: "'Cormorant Garamond', serif" }}
+                  >
+                    {r.name}
+                  </h3>
+                  {r.role && (
+                    <p className="text-[0.6rem] uppercase tracking-[0.22em] text-white/30 font-medium mt-0.5">
+                      {r.role}
+                    </p>
+                  )}
+                </div>
+                <span className="ml-auto text-[0.55rem] uppercase tracking-[0.2em] text-white/20 font-medium transition-colors duration-300 group-hover:text-white/40">
+                  Verificado
+                </span>
+              </div>
+
+              {/* Corner decorations */}
+              <div className="absolute bottom-3 right-3 w-6 h-6 pointer-events-none
+                border-b border-r border-white/0
+                transition-all duration-500
+                group-hover:border-white/15 group-hover:w-8 group-hover:h-8" />
+            </article>
+          ))}
         </div>
-      </section>
-    </div>
+      </div>
+    </section>
   );
 };
 

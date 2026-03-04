@@ -3,6 +3,7 @@ import AboutUs from "./components/AboutUs";
 import Services from "./components/Services";
 import GalleryServices from "./components/GalleryServices";
 import CustomersReviews from "./components/CustomersReviews";
+import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 
 export const App = () => {
@@ -13,6 +14,7 @@ export const App = () => {
       <Services />
       <GalleryServices />
       <CustomersReviews />
+      <Contact />
       <Footer />
     </>
   );

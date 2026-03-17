@@ -1,6 +1,7 @@
 import { createBrowserRouter } from "react-router";
 import Header from "./components/Header";
 import { App } from "./App";
+import GalleryCategoryPage from "./components/GalleryCategoryPage";
 
 export const router = createBrowserRouter([
   {
@@ -10,5 +11,9 @@ export const router = createBrowserRouter([
   {
     path: "/header",
     element: <Header />,
+  },
+  {
+    path: "/galeria/:categorySlug",
+    element: <GalleryCategoryPage />,
   },
 ]);

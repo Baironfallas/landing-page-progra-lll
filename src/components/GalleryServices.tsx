@@ -1,32 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-
-type GalleryItem = {
-  src: string;
-  alt: string;
-  label: string;
-  description: string;
-};
-
-const items: GalleryItem[] = [
-  {
-    src: "https://i.ibb.co/bQytGp8/pexels-caleb-falkenhagen-216813613-29932984.jpg",
-    alt: "Fotografía de naturaleza",
-    label: "Naturaleza",
-    description: "Flora, fauna y paisajes en su estado más puro.",
-  },
-  {
-    src: "https://i.ibb.co/5srqMJc/pexels-micotino-126770659-10044631.jpg",
-    alt: "Fotografía artística",
-    label: "Artística",
-    description: "Composiciones únicas con visión creativa.",
-  },
-  {
-    src: "https://i.ibb.co/6tBwNsK/pexels-vasilis-karkalas-155349971-17397880.jpg",
-    alt: "Fotografía de paisaje",
-    label: "Paisaje",
-    description: "Horizontes y escenarios que inspiran.",
-  },
-];
+import { Link } from "react-router";
+import { galleryItems } from "../data/galleryData";
 
 const GalleryServices = () => {
   const sectionRef = useRef<HTMLElement | null>(null);
@@ -102,9 +76,10 @@ const GalleryServices = () => {
             show ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10",
           ].join(" ")}
         >
-          {items.map((item, i) => (
-            <figure
-              key={item.src}
+          {galleryItems.map((item, i) => (
+            <Link
+              key={item.slug}
+              to={`/galeria/${item.slug}`}
               className="group relative overflow-hidden cursor-pointer"
               style={{ transitionDelay: `${i * 150}ms` }}
             >
@@ -146,7 +121,7 @@ const GalleryServices = () => {
                     group-hover:opacity-100 group-hover:translate-y-0"
                 >
                   <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/50 backdrop-blur-md px-4 py-2 text-[0.6rem] font-semibold uppercase tracking-[0.2em] text-white/80">
-                    Ver proyecto
+                    Ver serie
                     <svg width="10" height="10" viewBox="0 0 14 14" fill="none">
                       <path
                         d="M2 7h10M8 3l4 4-4 4"
@@ -189,7 +164,7 @@ const GalleryServices = () => {
                   transition-all duration-700
                   group-hover:inset-[-6px] group-hover:border-white/[0.08]"
               />
-            </figure>
+            </Link>
           ))}
         </div>
       </div>

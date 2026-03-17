@@ -8,7 +8,7 @@ const navLinks = [
   { label: "Services", href: "#Services" },
   { label: "Contact", href: "#Contact" },
 ];
-
+// Header component with responsive navigation
 const Header = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
 

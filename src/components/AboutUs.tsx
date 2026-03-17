@@ -4,6 +4,13 @@ const AboutUs = () => {
   const [visible, setVisible] = useState(false);
   const sectionRef = useRef(null);
 
+  const scrollToSection = (id: string) => {
+    const section = document.getElementById(id);
+    if (!section) return;
+
+    section.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
   useEffect(() => {
     const timer = setTimeout(() => setVisible(true), 100);
     return () => clearTimeout(timer);
@@ -36,7 +43,10 @@ const AboutUs = () => {
           </p>
 
           <div className={`hero-cta-row ${visible ? "show" : ""}`}>
-            <button className="btn-primary">
+            <button
+              className="btn-primary"
+              onClick={() => scrollToSection("ContactForm")}
+            >
               Descubre tu Sesión
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
                 <path
@@ -48,7 +58,12 @@ const AboutUs = () => {
                 />
               </svg>
             </button>
-            <button className="btn-link">Ver portafolio</button>
+            <button
+              className="btn-link"
+              onClick={() => scrollToSection("Gallery")}
+            >
+              Ver portafolio
+            </button>
           </div>
         </div>
 

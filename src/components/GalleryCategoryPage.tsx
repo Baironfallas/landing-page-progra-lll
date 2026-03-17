@@ -144,7 +144,10 @@ const GalleryCategoryPage = () => {
 
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {currentCategory.gallery.map((photo, index) => (
-              <figure key={`${photo.src}-${index}`} className="group relative overflow-hidden">
+              <figure
+                key={`${photo.src}-${index}`}
+                className="group relative overflow-hidden"
+              >
                 <div className="relative aspect-[4/5] overflow-hidden">
                   <img
                     src={photo.src}

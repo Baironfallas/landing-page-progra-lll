@@ -2,6 +2,7 @@ import Header from "./components/Header";
 import AboutUs from "./components/AboutUs";
 import Services from "./components/Services";
 import GalleryServices from "./components/GalleryServices";
+import ProcessFlow from "./components/ProcessFlow";
 import Pricing from "./components/Pricing";
 import CustomersReviews from "./components/CustomersReviews";
 import Contact from "./components/Contact";
@@ -14,6 +15,7 @@ export const App = () => {
       <AboutUs />
       <Services />
       <GalleryServices />
+      <ProcessFlow />
       <Pricing />
       <CustomersReviews />
       <Contact />

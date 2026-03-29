@@ -28,44 +28,32 @@ const GalleryServices = () => {
     <section
       id="Gallery"
       ref={sectionRef}
-      className="relative bg-[#050505] overflow-hidden"
-      style={{ fontFamily: "'Montserrat', sans-serif" }}
+      className="vt-section-dark vt-section-divider"
     >
       {/* Noise overlay */}
-      <div
-        className="pointer-events-none absolute inset-0 z-[1] opacity-40"
-        style={{
-          backgroundImage:
-            "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E\")",
-        }}
-      />
+      <div className="vt-noise-overlay" />
 
       {/* Ambient glow */}
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute left-1/2 top-0 h-96 w-[50rem] -translate-x-1/2 rounded-full bg-white/[0.03] blur-[100px]" />
       </div>
 
-      <div className="relative z-[2] mx-auto max-w-7xl px-6 py-24 md:py-32">
+      <div className="vt-content-layer mx-auto max-w-7xl px-6 vt-section-pad">
         {/* Section header */}
         <div className="mb-16 text-center">
           <div className="flex items-center justify-center gap-4 mb-5">
             <div className="h-px w-10 bg-white/30" />
-            <span className="text-[0.65rem] font-medium uppercase tracking-[0.25em] text-white/40">
-              Galería
-            </span>
+            <span className="vt-kicker text-[0.65rem]">Galería</span>
             <div className="h-px w-10 bg-white/30" />
           </div>
-          <h2
-            className="text-4xl md:text-5xl font-light text-white leading-tight"
-            style={{ fontFamily: "'Cormorant Garamond', serif" }}
-          >
+          <h2 className="vt-title-serif text-4xl md:text-5xl font-light text-white leading-tight">
             Nuestro <em className="italic text-white/70">Trabajo</em>
           </h2>
-          <p className="mt-4 text-sm text-white/40 max-w-md mx-auto leading-relaxed">
+          <p className="vt-body-copy mt-4 max-w-md mx-auto">
             Cada imagen cuenta una historia. Descubre los estilos que definen
             nuestra visión fotográfica.
           </p>
-          <div className="w-12 h-px bg-white/20 mx-auto mt-6" />
+          <div className="vt-divider mx-auto mt-6" />
         </div>
 
         {/* Gallery grid */}
@@ -140,9 +128,8 @@ const GalleryServices = () => {
                     Servicio
                   </p>
                   <p
-                    className="text-xl md:text-2xl font-light text-white mb-2
+                    className="vt-title-serif text-xl md:text-2xl font-light text-white mb-2
                       transition-transform duration-500 group-hover:translate-x-2"
-                    style={{ fontFamily: "'Cormorant Garamond', serif" }}
                   >
                     {item.label}
                   </p>

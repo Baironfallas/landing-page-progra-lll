@@ -17,7 +17,11 @@ const AboutUs = () => {
   }, []);
 
   return (
-    <section id="AboutUs" className="hero-section" ref={sectionRef}>
+    <section
+      id="AboutUs"
+      className="hero-section vt-section-dark"
+      ref={sectionRef}
+    >
       <div className="hero-inner">
         {/* ── LEFT COLUMN ── */}
         <div className="hero-text">

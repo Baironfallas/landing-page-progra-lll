@@ -4,6 +4,7 @@ import Services from "./components/Services";
 import GalleryServices from "./components/GalleryServices";
 import ProcessFlow from "./components/ProcessFlow";
 import Pricing from "./components/Pricing";
+import SocialProof from "./components/SocialProof";
 import CustomersReviews from "./components/CustomersReviews";
 import Contact from "./components/Contact";
 import Footer from "./components/Footer";
@@ -17,6 +18,7 @@ export const App = () => {
       <GalleryServices />
       <ProcessFlow />
       <Pricing />
+      <SocialProof />
       <CustomersReviews />
       <Contact />
       <Footer />

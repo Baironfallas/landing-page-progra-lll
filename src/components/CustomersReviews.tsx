@@ -83,9 +83,7 @@ const CustomersReviews = () => {
         <div className="mb-16 text-center">
           <div className="flex items-center justify-center gap-4 mb-5">
             <div className="h-px w-10 bg-white/30" />
-            <span className="vt-kicker text-[0.65rem]">
-              Testimonios
-            </span>
+            <span className="vt-kicker text-[0.65rem]">Testimonios</span>
             <div className="h-px w-10 bg-white/30" />
           </div>
           <h2 className="vt-title-serif text-4xl md:text-5xl font-light text-white leading-tight">

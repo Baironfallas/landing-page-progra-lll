@@ -2,7 +2,10 @@ import { FaEnvelope, FaPhone, FaMapMarkerAlt } from "react-icons/fa";
 
 const Contact = () => {
   return (
-    <section id="Contact" className="vt-section-dark vt-section-pad px-6">
+    <section
+      id="Contact"
+      className="vt-section-dark vt-section-divider vt-section-pad px-6"
+    >
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-16">

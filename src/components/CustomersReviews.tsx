@@ -69,7 +69,7 @@ const CustomersReviews = () => {
   }, []);
 
   return (
-    <section ref={sectionRef} className="vt-section-dark">
+    <section ref={sectionRef} className="vt-section-dark vt-section-divider">
       {/* Noise overlay */}
       <div className="vt-noise-overlay" />
 

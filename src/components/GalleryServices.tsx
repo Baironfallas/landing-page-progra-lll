@@ -25,7 +25,11 @@ const GalleryServices = () => {
   }, []);
 
   return (
-    <section id="Gallery" ref={sectionRef} className="vt-section-dark">
+    <section
+      id="Gallery"
+      ref={sectionRef}
+      className="vt-section-dark vt-section-divider"
+    >
       {/* Noise overlay */}
       <div className="vt-noise-overlay" />
 

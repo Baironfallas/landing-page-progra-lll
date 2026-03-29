@@ -61,7 +61,11 @@ const Services = () => {
   const [, setHovered] = useState<number | null>(null);
 
   return (
-    <section id="Services" className="srv-section" ref={sectionRef}>
+    <section
+      id="Services"
+      className="srv-section vt-section-divider"
+      ref={sectionRef}
+    >
       <div className="srv-inner">
         {/* Header */}
         <header className="srv-header">

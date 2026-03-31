@@ -91,7 +91,7 @@ const WhyUs = () => {
     <section
       id="WhyUs"
       ref={sectionRef}
-      className="vt-section-dark vt-section-divider relative py-16 md:py-24 overflow-hidden"
+      className="vt-section-dark vt-section-divider relative py-10 md:py-16 overflow-hidden"
     >
       {/* Noise overlay */}
       <div className="vt-noise-overlay opacity-50" />

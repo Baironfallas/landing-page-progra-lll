@@ -1,5 +1,12 @@
 import { useEffect, useRef, useState } from "react";
-import { FaShieldAlt, FaClock, FaSync, FaCheckDouble, FaFileContract, FaHeadset } from "react-icons/fa";
+import {
+  FaShieldAlt,
+  FaClock,
+  FaSync,
+  FaCheckDouble,
+  FaFileContract,
+  FaHeadset,
+} from "react-icons/fa";
 
 type GuaranteeItem = {
   num: string;
@@ -13,25 +20,29 @@ const guarantees: GuaranteeItem[] = [
     num: "01",
     Icon: FaShieldAlt,
     title: "Satisfacción 100%",
-    description: "Si no quedan satisfechos con el resultado, devolvemos tu inversión sin preguntas.",
+    description:
+      "Si no quedan satisfechos con el resultado, devolvemos tu inversión sin preguntas.",
   },
   {
     num: "02",
     Icon: FaClock,
     title: "Entrega Rápida",
-    description: "Archivos finales entregados en máximo 48 horas tras la sesión.",
+    description:
+      "Archivos finales entregados en máximo 48 horas tras la sesión.",
   },
   {
     num: "03",
     Icon: FaSync,
     title: "Revisiones Ilimitadas",
-    description: "Ajustes y modificaciones totalmente gratuitas hasta tu conformidad.",
+    description:
+      "Ajustes y modificaciones totalmente gratuitas hasta tu conformidad.",
   },
   {
     num: "04",
     Icon: FaCheckDouble,
     title: "Edición Premium",
-    description: "Retoque profesional, color grading y correcciones incluidas en todos los paquetes.",
+    description:
+      "Retoque profesional, color grading y correcciones incluidas en todos los paquetes.",
   },
   {
     num: "05",
@@ -43,7 +54,8 @@ const guarantees: GuaranteeItem[] = [
     num: "06",
     Icon: FaHeadset,
     title: "Disponibilidad Total",
-    description: "Soporte directo durante tu proyecto. Respuestas en menos de 2 horas.",
+    description:
+      "Soporte directo durante tu proyecto. Respuestas en menos de 2 horas.",
   },
 ];
 
@@ -118,8 +130,9 @@ const Guarantee = () => {
               inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8",
             ].join(" ")}
           >
-            Tu inversión está protegida. Nos comprometemos con cada detalle, desde la 
-            captura hasta la entrega final, con garantías que responden a lo que realmente importa.
+            Tu inversión está protegida. Nos comprometemos con cada detalle,
+            desde la captura hasta la entrega final, con garantías que responden
+            a lo que realmente importa.
           </p>
         </div>
 
@@ -182,8 +195,11 @@ const Guarantee = () => {
           ].join(" ")}
         >
           <p className="text-white/50 max-w-2xl mx-auto">
-            Cada garantía respalda nuestro <span className="text-white/70 font-medium">compromiso con la excelencia</span> y 
-            tu tranquilidad en cada proyecto.
+            Cada garantía respalda nuestro{" "}
+            <span className="text-white/70 font-medium">
+              compromiso con la excelencia
+            </span>{" "}
+            y tu tranquilidad en cada proyecto.
           </p>
         </div>
       </div>

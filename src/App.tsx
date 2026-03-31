@@ -7,6 +7,7 @@ import ProcessFlow from "./components/ProcessFlow";
 import Pricing from "./components/Pricing";
 import SocialProof from "./components/SocialProof";
 import CustomersReviews from "./components/CustomersReviews";
+import Guarantee from "./components/Guarantee";
 import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 
@@ -21,6 +22,7 @@ export const App = () => {
       <ProcessFlow />
       <Pricing />
       <SocialProof />
+      <Guarantee />
       <CustomersReviews />
       <Contact />
       <Footer />

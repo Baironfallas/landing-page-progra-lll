@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 
 const AboutUs = () => {
@@ -24,7 +25,12 @@ const AboutUs = () => {
     >
       <div className="hero-inner">
         {/* ── LEFT COLUMN ── */}
-        <div className="hero-text">
+        <motion.div
+          className="hero-text"
+          initial={{ opacity: 0, y: 20 }}
+          animate={visible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ duration: 0.9, ease: "easeOut" }}
+        >
           <div className={`hero-eyebrow ${visible ? "show" : ""}`}>
             <div className="eyebrow-line" />
             <span className="eyebrow-label">Fotografía de autor</span>
@@ -69,19 +75,36 @@ const AboutUs = () => {
               Ver portafolio
             </button>
           </div>
-        </div>
+        </motion.div>
 
         {/* ── RIGHT COLUMN ── */}
-        <div className="hero-visual">
+        <motion.div
+          className="hero-visual"
+          initial={{ opacity: 0, y: 20 }}
+          animate={visible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ duration: 1, ease: "easeOut", delay: 0.1 }}
+        >
           <div className="img-glow" />
 
           {/* Floating stat */}
-          <div className={`stat-card ${visible ? "show" : ""}`}>
+          <motion.div
+            className={`stat-card ${visible ? "show" : ""}`}
+            animate={
+              visible ? { y: [0, 6, 0] } : { y: 0 }
+            }
+            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+          >
             <span className="stat-num">+340</span>
             <span className="stat-label">Sesiones realizadas</span>
-          </div>
+          </motion.div>
 
-          <div className={`img-frame ${visible ? "show" : ""}`}>
+          <motion.div
+            className={`img-frame ${visible ? "show" : ""}`}
+            animate={
+              visible ? { y: [0, -8, 0] } : { y: 0 }
+            }
+            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+          >
             <div className="img-inner">
               <img
                 src="https://i.ibb.co/rHkNqGP/imagen-about-me.jpg"
@@ -96,8 +119,8 @@ const AboutUs = () => {
                 <span className="img-tag-value">Sesión Perfecta</span>
               </div>
             </div>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       </div>
     </section>
   );

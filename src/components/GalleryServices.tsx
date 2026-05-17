@@ -1,10 +1,15 @@
+import { dragAndDrop } from "@formkit/drag-and-drop";
+import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router";
 import { galleryItems } from "../data/galleryData";
 
 const GalleryServices = () => {
   const sectionRef = useRef<HTMLElement | null>(null);
+  const parentRef = useRef<HTMLDivElement | null>(null);
   const [show, setShow] = useState(false);
+  const [items, setItems] = useState(galleryItems);
+  const itemsRef = useRef(items);
 
   useEffect(() => {
     if (!sectionRef.current) return;
@@ -23,6 +28,29 @@ const GalleryServices = () => {
 
     return () => obs.disconnect();
   }, []);
+
+  useEffect(() => {
+    itemsRef.current = items;
+  }, [items]);
+
+  useEffect(() => {
+    if (!parentRef.current) return undefined;
+
+    const teardown = dragAndDrop({
+      parent: parentRef.current,
+      getValues: () => itemsRef.current,
+      setValues: (newValues) => {
+        itemsRef.current = newValues;
+        setItems(newValues);
+      },
+    });
+
+    return () => {
+      if (typeof teardown === "function") teardown();
+    };
+  }, []);
+
+  const MotionLink = motion(Link);
 
   return (
     <section
@@ -58,18 +86,23 @@ const GalleryServices = () => {
 
         {/* Gallery grid */}
         <div
-          className={[
-            "grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8",
-            "transition-all duration-1000 ease-out",
-            show ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10",
-          ].join(" ")}
+          ref={parentRef}
+          className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8"
         >
-          {galleryItems.map((item, i) => (
-            <Link
+          {items.map((item, i) => (
+            <MotionLink
               key={item.slug}
               to={`/galeria/${item.slug}`}
-              className="group relative overflow-hidden cursor-pointer"
-              style={{ transitionDelay: `${i * 150}ms` }}
+              className="group relative overflow-hidden cursor-pointer dnd-card"
+              layout
+              initial={{ opacity: 0, y: 24 }}
+              animate={show ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
+              transition={{
+                duration: 0.8,
+                ease: "easeOut",
+                delay: i * 0.12,
+                layout: { duration: 1.15, ease: "easeInOut", delay: 0.08 },
+              }}
             >
               {/* Image container */}
               <div className="relative aspect-[3/4] overflow-hidden">
@@ -151,7 +184,7 @@ const GalleryServices = () => {
                   transition-all duration-700
                   group-hover:inset-[-6px] group-hover:border-white/[0.08]"
               />
-            </Link>
+            </MotionLink>
           ))}
         </div>
       </div>

@@ -43,11 +43,7 @@ const Header = () => {
             <li className="ml-3">
               <a
                 href="#Contact"
-                className="inline-flex items-center px-5 py-2 text-sm font-semibold text-[#050505]
-                  bg-white rounded-full shadow-md shadow-black/40
-                  transition-all duration-300
-                  hover:bg-white/90 hover:shadow-lg hover:-translate-y-0.5
-                  active:translate-y-0 active:shadow-md"
+                className="vt-cta-button"
               >
                 Get Started
               </a>
@@ -93,10 +89,7 @@ const Header = () => {
               <a
                 href="#Contact"
                 onClick={() => setMobileOpen(false)}
-                className="block text-center px-5 py-3 text-sm font-semibold text-[#050505]
-                  bg-white rounded-full shadow-md shadow-black/40
-                  transition-all duration-300
-                  hover:bg-white/90 hover:shadow-lg"
+                className="vt-cta-button w-full"
               >
                 Get Started
               </a>

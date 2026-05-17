@@ -10,10 +10,12 @@ import CustomersReviews from "./components/CustomersReviews";
 import Guarantee from "./components/Guarantee";
 import Contact from "./components/Contact";
 import Footer from "./components/Footer";
+import ThreeBackdrop from "./components/ThreeBackdrop";
 
 export const App = () => {
   return (
     <>
+      <ThreeBackdrop />
       <Header />
       <AboutUs />
       <Services />

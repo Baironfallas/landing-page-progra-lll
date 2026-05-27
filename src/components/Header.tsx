@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { FaBars, FaTimes } from "react-icons/fa";
-import { TbAperture } from "react-icons/tb";
+import logo from "../assets/logo.png";
 
 const navLinks = [
   { label: "Home", href: "#" },
@@ -17,7 +17,11 @@ const Header = () => {
       <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-4">
         {/* Logo */}
         <a href="#" className="group flex items-center gap-3 select-none">
-          <TbAperture className="w-9 h-9 text-white stroke-[1.5] transition-transform duration-500 group-hover:rotate-180 group-hover:scale-110" />
+          <img
+            src={logo}
+            alt="Snapsy"
+            className="h-10 w-10 rounded-full object-cover ring-1 ring-white/20 transition-transform duration-500 group-hover:scale-[1.03]"
+          />
           <span className="text-2xl font-bold tracking-tight text-white transition-colors duration-300 group-hover:text-white/70">
             Snapsy
           </span>

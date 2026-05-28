@@ -1,207 +1,241 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
-  FaAward,
-  FaCheckCircle,
-  FaUsers,
-  FaLightbulb,
-  FaHeadset,
-  FaHeart,
-} from "react-icons/fa";
+  Film,
+  MapPin,
+  Package,
+  Shield,
+  Star,
+  Zap,
+} from "lucide-react";
 
 type Benefit = {
-  num: string;
-  Icon: React.ComponentType<{ className?: string }>;
+  id: string;
   title: string;
   description: string;
+  Icon: React.ComponentType<{ className?: string }>;
+  metric?: {
+    value: number;
+    suffix: string;
+  };
 };
 
 const benefits: Benefit[] = [
   {
-    num: "01",
-    Icon: FaAward,
-    title: "Experiencia Comprobada",
+    id: "same-day",
+    title: "Same-Day Previews",
     description:
-      "Más de 340 proyectos exitosos con clientes satisfechos en todo el país.",
+      "Curated previews delivered within 24 hours of your session. Share fresh moments while the energy is still vivid.",
+    Icon: Zap,
+    metric: { value: 24, suffix: "h" },
   },
   {
-    num: "02",
-    Icon: FaUsers,
-    title: "Equipo Especializado",
+    id: "cinematic",
+    title: "Cinematic Editing",
     description:
-      "Profesionales certificados y apasionados por la excelencia visual.",
+      "Film-inspired grading, texture, and tonal control for every gallery. Your story lands with depth and atmosphere.",
+    Icon: Film,
   },
   {
-    num: "03",
-    Icon: FaLightbulb,
-    title: "Innovación Constante",
+    id: "licensed",
+    title: "Licensed Drone Ops",
     description:
-      "Utilizamos la última tecnología en fotografía y cinematografía aérea.",
+      "Certified drone operations with safety-first planning on every flight. Aerials delivered with compliance and polish.",
+    Icon: Shield,
   },
   {
-    num: "04",
-    Icon: FaCheckCircle,
-    title: "Calidad Premium",
+    id: "location",
+    title: "On-Location Flexibility",
     description:
-      "Cada proyecto es tratado con atención al detalle y máxima profesionalismo.",
+      "We travel to studios, homes, and remote locations on demand. Lighting kits and crews adapt to your environment.",
+    Icon: MapPin,
   },
   {
-    num: "05",
-    Icon: FaHeadset,
-    title: "Atención Personalizada",
+    id: "raw",
+    title: "RAW File Delivery",
     description:
-      "Comunicación directa y seguimiento constante durante todo el proceso.",
+      "Secure access to RAW selections for archival and flexibility. Ideal for brands needing full post control.",
+    Icon: Package,
   },
   {
-    num: "06",
-    Icon: FaHeart,
-    title: "Garantía de Satisfacción",
+    id: "guarantee",
+    title: "Satisfaction Guarantee",
     description:
-      "Nos comprometemos con resultados que superan tus expectativas.",
+      "If you are not thrilled, we reshoot to make it right. Your confidence is protected from first click to final export.",
+    Icon: Star,
+    metric: { value: 100, suffix: "%" },
   },
 ];
 
-const useInView = (threshold = 0.15) => {
-  const ref = useRef(null);
+const WhyUs = () => {
+  const sectionRef = useRef<HTMLElement | null>(null);
   const [inView, setInView] = useState(false);
+  const [metricValues, setMetricValues] = useState<Record<string, number>>({});
+  const [metricDone, setMetricDone] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
-    const obs = new IntersectionObserver(
-      ([e]) => {
-        if (e.isIntersecting) {
+    if (!sectionRef.current) return undefined;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
           setInView(true);
-          obs.disconnect();
+          observer.disconnect();
         }
       },
-      { threshold },
+      { threshold: 0.2 },
     );
-    if (ref.current) obs.observe(ref.current);
-    return () => obs.disconnect();
-  }, [threshold]);
 
-  return [ref, inView];
-};
+    observer.observe(sectionRef.current);
 
-const WhyUs = () => {
-  const [sectionRef, inView] = useInView(0.1) as [
-    React.RefObject<HTMLElement>,
-    boolean,
-  ];
+    return () => observer.disconnect();
+  }, []);
+
+  const metrics = useMemo(
+    () => benefits.filter((benefit) => benefit.metric),
+    [],
+  );
+
+  useEffect(() => {
+    if (!inView) return undefined;
+
+    const timeouts: number[] = [];
+    const rafs: number[] = [];
+
+    metrics.forEach((benefit, index) => {
+      const metric = benefit.metric;
+      if (!metric) return;
+
+      const delay = index * 100;
+      const timeoutId = window.setTimeout(() => {
+        const start = performance.now();
+        const duration = 1200;
+
+        const animate = (now: number) => {
+          const progress = Math.min(1, (now - start) / duration);
+          const value = Math.round(metric.value * progress);
+
+          setMetricValues((prev) => ({
+            ...prev,
+            [benefit.id]: value,
+          }));
+
+          if (progress < 1) {
+            rafs.push(window.requestAnimationFrame(animate));
+          } else {
+            setMetricDone((prev) => ({
+              ...prev,
+              [benefit.id]: true,
+            }));
+          }
+        };
+
+        rafs.push(window.requestAnimationFrame(animate));
+      }, delay);
+
+      timeouts.push(timeoutId);
+    });
+
+    return () => {
+      timeouts.forEach((id) => window.clearTimeout(id));
+      rafs.forEach((id) => window.cancelAnimationFrame(id));
+    };
+  }, [inView, metrics]);
 
   return (
     <section
       id="WhyUs"
       ref={sectionRef}
-      className="vt-section-dark vt-section-divider relative py-10 md:py-16 overflow-hidden"
+      className="vt-section-dark vt-section-divider relative py-12 md:py-16"
     >
-      {/* Noise overlay */}
       <div className="vt-noise-overlay opacity-50" />
 
-      {/* Animated background elements */}
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute -left-40 top-1/4 w-80 h-80 rounded-full bg-white/[0.02] blur-[80px]" />
-        <div className="absolute -right-40 bottom-1/4 w-80 h-80 rounded-full bg-white/[0.02] blur-[80px]" />
-      </div>
-
-      <div className="vt-content-layer mx-auto max-w-7xl px-6 relative z-10">
-        {/* Header */}
-        <div className="mb-16 md:mb-20">
-          <div
-            className={[
-              "flex items-center gap-3 mb-4 transition-all duration-700 ease-out",
-              inView ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-4",
-            ].join(" ")}
-          >
-            <div className="w-3 h-0.5 bg-white/30" />
-            <span className="vt-kicker">Por Qué Elegirnos</span>
+      <div className="vt-content-layer mx-auto max-w-7xl px-6">
+        <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
+          <div>
+            <h2 className="vt-title-serif text-[clamp(40px,5vw,64px)] leading-[0.95] text-white">
+              Why Clients
+              <br />
+              <em className="italic font-normal text-white/80">
+                Choose Us.
+              </em>
+            </h2>
           </div>
-
-          <h2
-            className={[
-              "vt-title-serif text-5xl md:text-6xl lg:text-7xl font-light text-white mb-6",
-              "transition-all duration-1000 ease-out",
-              inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8",
-            ].join(" ")}
-          >
-            Razones para{" "}
-            <em className="italic font-normal">confiar en nosotros</em>
-          </h2>
-
-          <p
-            className={[
-              "vt-body-copy max-w-2xl text-lg transition-all duration-1000 ease-out delay-200",
-              inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8",
-            ].join(" ")}
-          >
-            Somos más que profesionales de la imagen. Nos comprometemos con tu
-            visión, transformando ideas en realidades visuales excepcionales que
-            generan impacto.
+          <p className="font-[Montserrat] text-[14px] font-light leading-[1.7] text-white/55 max-w-xl">
+            We combine technical precision with artistic vision to deliver work
+            that exceeds expectations every time.
           </p>
         </div>
 
-        {/* Benefits Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-          {benefits.map((benefit, idx) => {
-            const IconComponent = benefit.Icon;
+        <div className="mt-10 h-px w-full bg-white/10" />
+
+        <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {benefits.map((benefit, index) => {
+            const Icon = benefit.Icon;
+            const metric = benefit.metric;
+            const metricValue = metricValues[benefit.id] ?? 0;
+            const metricReady = metric ? metricDone[benefit.id] : true;
+
             return (
-              <div
-                key={benefit.title}
+              <button
+                key={benefit.id}
+                type="button"
                 className={[
-                  "group relative p-8 rounded-xl border backdrop-blur-sm",
-                  "transition-all duration-500 ease-out",
-                  "hover:border-white/30 hover:bg-white/[0.08] hover:-translate-y-2",
-                  "border-white/10 bg-white/[0.02]",
+                  "group relative overflow-hidden rounded-[4px] border bg-white/[0.03] p-8 text-left",
+                  "transition-all duration-300 ease-out",
+                  "hover:bg-white/[0.06] hover:border-white/20",
+                  "border-white/10 cursor-pointer",
+                  "focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#F5D08B]/70",
                   inView
                     ? "opacity-100 translate-y-0"
-                    : "opacity-0 translate-y-12",
+                    : "opacity-0 translate-y-6",
                 ].join(" ")}
-                style={{
-                  transitionDelay: inView ? `${idx * 80}ms` : "0s",
-                }}
+                style={{ transitionDelay: inView ? `${index * 100}ms` : "0ms" }}
               >
-                {/* Number */}
-                <div className="absolute top-6 right-6 opacity-30 group-hover:opacity-50 transition-opacity duration-300">
-                  <span className="vt-title-serif text-5xl font-light text-white/20">
-                    {benefit.num}
-                  </span>
-                </div>
-
-                {/* Icon */}
-                <div className="mb-5 inline-flex">
-                  <div className="w-12 h-12 rounded-lg bg-white/[0.08] flex items-center justify-center group-hover:bg-white/[0.12] transition-all duration-300">
-                    <IconComponent className="w-6 h-6 text-white/70 group-hover:text-white/90 transition-colors duration-300" />
+                {metric && (
+                  <div
+                    className={[
+                      "absolute inset-0 flex items-center justify-center pointer-events-none",
+                      "vt-title-serif text-[120px] text-white/[0.03]",
+                      "transition-opacity duration-300",
+                      metricDone[benefit.id] ? "opacity-0" : "opacity-100",
+                    ].join(" ")}
+                    aria-hidden="true"
+                  >
+                    {metricValue}
+                    {metric.suffix}
                   </div>
-                </div>
+                )}
 
-                {/* Content */}
-                <div>
-                  <h3 className="text-xl font-semibold text-white mb-3 group-hover:text-white/95 transition-colors duration-300">
+                <div
+                  className={[
+                    "transition-opacity duration-300",
+                    metricReady ? "opacity-100" : "opacity-0",
+                  ].join(" ")}
+                >
+                  <div
+                    className={[
+                      "relative flex h-12 w-12 items-center justify-center",
+                      "transition-shadow duration-300",
+                      "shadow-[0_0_0_rgba(123,208,196,0)]",
+                      "group-hover:shadow-[0_0_32px_rgba(123,208,196,0.2)]",
+                    ].join(" ")}
+                  >
+                    <Icon className="h-7 w-7 text-white" />
+                  </div>
+
+                  <span className="mt-5 inline-block h-px w-6 bg-[#F5D08B] transition-all duration-300 group-hover:w-12" />
+
+                  <h3 className="mt-5 vt-title-serif text-[20px] font-semibold text-white">
                     {benefit.title}
                   </h3>
-                  <p className="text-white/50 text-sm leading-relaxed group-hover:text-white/60 transition-colors duration-300">
+
+                  <p className="mt-3 font-[Montserrat] text-[13px] font-light leading-[1.65] text-white/55">
                     {benefit.description}
                   </p>
                 </div>
-
-                {/* Border animation */}
-                <div className="absolute inset-0 rounded-xl border-2 border-white/0 group-hover:border-white/10 transition-all duration-300 pointer-events-none" />
-              </div>
+              </button>
             );
           })}
-        </div>
-
-        {/* Bottom accent */}
-        <div
-          className={[
-            "mt-16 pt-12 border-t border-white/5 text-center transition-all duration-1000 ease-out delay-300",
-            inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8",
-          ].join(" ")}
-        >
-          <p className="text-white/50 max-w-2xl mx-auto">
-            Con nosotros obtienes más que un servicio: obtienes un{" "}
-            <span className="text-white/70 font-medium">partner visual</span>{" "}
-            que entiende tus necesidades y se dedica a materializarlas con
-            excelencia.
-          </p>
         </div>
       </div>
     </section>

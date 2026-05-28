@@ -1,56 +1,176 @@
-import { dragAndDrop } from "@formkit/drag-and-drop";
-import { motion } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router";
-import { galleryItems } from "../data/galleryData";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { ChevronLeft, ChevronRight, Maximize2, X } from "lucide-react";
+
+type GalleryItem = {
+  id: string;
+  title: string;
+  category: "Portraits" | "Events" | "Commercial" | "Aerial";
+  chip: string;
+  src: string;
+  slot: number;
+  aspect: string;
+};
+
+const galleryItems: GalleryItem[] = [
+  {
+    id: "portrait-1",
+    title: "Portrait Study",
+    category: "Portraits",
+    chip: "Portrait",
+    src: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=800",
+    slot: 1,
+    aspect: "3 / 4",
+  },
+  {
+    id: "event-1",
+    title: "Wedding Editorial",
+    category: "Events",
+    chip: "Event",
+    src: "https://images.unsplash.com/photo-1519741497674-611481863552?w=800",
+    slot: 2,
+    aspect: "16 / 9",
+  },
+  {
+    id: "aerial-1",
+    title: "Aerial Motion",
+    category: "Aerial",
+    chip: "Aerial",
+    src: "https://images.unsplash.com/photo-1508854710579-5cecc3a9ff17?w=800",
+    slot: 3,
+    aspect: "16 / 9",
+  },
+  {
+    id: "commercial-1",
+    title: "Brand Campaign",
+    category: "Commercial",
+    chip: "Commercial",
+    src: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=800",
+    slot: 4,
+    aspect: "1 / 1",
+  },
+  {
+    id: "retouch-1",
+    title: "Studio Retouch",
+    category: "Commercial",
+    chip: "Retouching",
+    src: "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=800",
+    slot: 5,
+    aspect: "1 / 1",
+  },
+  {
+    id: "video-1",
+    title: "Film Production",
+    category: "Commercial",
+    chip: "Video",
+    src: "https://images.unsplash.com/photo-1601506521793-dc748fc80b67?w=800",
+    slot: 6,
+    aspect: "16 / 9",
+  },
+  {
+    id: "event-2",
+    title: "Live Moments",
+    category: "Events",
+    chip: "Event",
+    src: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=800",
+    slot: 7,
+    aspect: "21 / 9",
+  },
+  {
+    id: "portrait-2",
+    title: "Portrait in Color",
+    category: "Portraits",
+    chip: "Portrait",
+    src: "https://images.unsplash.com/photo-1520635166053-2b4f84df5ef5?w=800",
+    slot: 8,
+    aspect: "21 / 9",
+  },
+];
+
+const filters = ["All", "Portraits", "Events", "Commercial", "Aerial"] as const;
+type Filter = (typeof filters)[number];
 
 const GalleryServices = () => {
   const sectionRef = useRef<HTMLElement | null>(null);
-  const parentRef = useRef<HTMLDivElement | null>(null);
-  const [show, setShow] = useState(false);
-  const [items, setItems] = useState(galleryItems);
-  const itemsRef = useRef(items);
+  const [activeFilter, setActiveFilter] = useState<Filter>("All");
+  const [isFiltering, setIsFiltering] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+  const [inView, setInView] = useState(false);
+
+  const filteredItems = useMemo(() => {
+    if (activeFilter === "All") return galleryItems;
+    return galleryItems.filter((item) => item.category === activeFilter);
+  }, [activeFilter]);
 
   useEffect(() => {
-    if (!sectionRef.current) return;
+    setIsFiltering(true);
+    setLightboxIndex(null);
+    const timer = window.setTimeout(() => setIsFiltering(false), 300);
+    return () => window.clearTimeout(timer);
+  }, [activeFilter]);
 
-    const obs = new IntersectionObserver(
+  useEffect(() => {
+    if (!sectionRef.current) return undefined;
+
+    const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setShow(true);
-          obs.disconnect();
+          setInView(true);
+          observer.disconnect();
         }
       },
-      { threshold: 0.15 },
+      { threshold: 0.2 },
     );
 
-    obs.observe(sectionRef.current);
+    observer.observe(sectionRef.current);
 
-    return () => obs.disconnect();
+    return () => observer.disconnect();
   }, []);
 
-  useEffect(() => {
-    itemsRef.current = items;
-  }, [items]);
+  const itemsLength = filteredItems.length;
+  const isLightboxOpen = lightboxIndex !== null && itemsLength > 0;
+  const currentItem = isLightboxOpen ? filteredItems[lightboxIndex] : null;
 
-  useEffect(() => {
-    if (!parentRef.current) return undefined;
+  const openLightbox = useCallback((index: number) => {
+    setLightboxIndex(index);
+  }, []);
 
-    const teardown = dragAndDrop({
-      parent: parentRef.current,
-      getValues: () => itemsRef.current,
-      setValues: (newValues) => {
-        itemsRef.current = newValues;
-        setItems(newValues);
-      },
+  const closeLightbox = useCallback(() => {
+    setLightboxIndex(null);
+  }, []);
+
+  const goNext = useCallback(() => {
+    setLightboxIndex((prev) => {
+      if (prev === null) return 0;
+      return (prev + 1) % itemsLength;
     });
+  }, [itemsLength]);
+
+  const goPrev = useCallback(() => {
+    setLightboxIndex((prev) => {
+      if (prev === null) return 0;
+      return (prev - 1 + itemsLength) % itemsLength;
+    });
+  }, [itemsLength]);
+
+  useEffect(() => {
+    if (!isLightboxOpen) return undefined;
+
+    const handleKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") closeLightbox();
+      if (event.key === "ArrowRight") goNext();
+      if (event.key === "ArrowLeft") goPrev();
+    };
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    window.addEventListener("keydown", handleKey);
 
     return () => {
-      if (typeof teardown === "function") teardown();
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", handleKey);
     };
-  }, []);
-
-  const MotionLink = motion(Link);
+  }, [isLightboxOpen, closeLightbox, goNext, goPrev]);
 
   return (
     <section
@@ -58,136 +178,124 @@ const GalleryServices = () => {
       ref={sectionRef}
       className="vt-section-dark vt-section-divider"
     >
-      {/* Noise overlay */}
       <div className="vt-noise-overlay" />
 
-      {/* Ambient glow */}
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute left-1/2 top-0 h-96 w-[50rem] -translate-x-1/2 rounded-full bg-white/[0.03] blur-[100px]" />
-      </div>
-
       <div className="vt-content-layer mx-auto max-w-7xl px-6 vt-section-pad">
-        {/* Section header */}
-        <div className="mb-16 text-center">
-          <div className="flex items-center justify-center gap-4 mb-5">
-            <div className="h-px w-10 bg-white/30" />
-            <span className="vt-kicker text-[0.65rem]">Galería</span>
-            <div className="h-px w-10 bg-white/30" />
+        <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+          <div>
+            <p className="font-[Montserrat] text-[10px] uppercase tracking-[0.4em] text-white/40">
+              Selected Work
+            </p>
+            <h2 className="mt-4 vt-title-serif text-[clamp(40px,5vw,64px)] leading-[0.95] text-white">
+              The <em className="italic text-white/70">Portfolio.</em>
+            </h2>
           </div>
-          <h2 className="vt-title-serif text-4xl md:text-5xl font-light text-white leading-tight">
-            Nuestro <em className="italic text-white/70">Trabajo</em>
-          </h2>
-          <p className="vt-body-copy mt-4 max-w-md mx-auto">
-            Cada imagen cuenta una historia. Descubre los estilos que definen
-            nuestra visión fotográfica.
-          </p>
-          <div className="vt-divider mx-auto mt-6" />
+          <button
+            type="button"
+            className="self-start rounded-[2px] border border-white/20 px-6 py-3 font-[Montserrat] text-[11px] uppercase tracking-[0.2em] text-white/80 transition-colors duration-200 hover:border-white hover:text-white"
+          >
+            View All Categories →
+          </button>
         </div>
 
-        {/* Gallery grid */}
+        <div className="mt-10 flex flex-wrap gap-3">
+          {filters.map((filter) => {
+            const isActive = activeFilter === filter;
+            return (
+              <button
+                key={filter}
+                type="button"
+                onClick={() => setActiveFilter(filter)}
+                className={[
+                  "rounded-full border px-4 py-2 font-[Montserrat] text-[10px] uppercase tracking-[0.25em]",
+                  "transition-colors duration-200",
+                  isActive
+                    ? "border-[#F5D08B] text-[#F5D08B]"
+                    : "border-white/20 text-white/60 hover:border-white/50 hover:text-white",
+                ].join(" ")}
+                aria-pressed={isActive}
+              >
+                {filter}
+              </button>
+            );
+          })}
+        </div>
+
         <div
-          ref={parentRef}
-          className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8"
+          className={[
+            "gallery-mosaic gallery-fade mt-10",
+            isFiltering ? "is-fading" : "",
+          ].join(" ")}
         >
-          {items.map((item, i) => (
-            <MotionLink
-              key={item.slug}
-              to={`/galeria/${item.slug}`}
-              className="group relative overflow-hidden cursor-pointer dnd-card"
-              layout
-              initial={{ opacity: 0, y: 24 }}
-              animate={show ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
-              transition={{
-                duration: 0.8,
-                ease: "easeOut",
-                delay: i * 0.12,
-                layout: { duration: 1.15, ease: "easeInOut", delay: 0.08 },
+          {filteredItems.map((item, index) => (
+            <button
+              key={item.id}
+              type="button"
+              onClick={() => openLightbox(index)}
+              className={`gallery-mosaic-item gallery-item-${item.slot} gallery-card group focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#F5D08B]/70 ${
+                inView ? "is-visible" : ""
+              }`}
+              style={{
+                aspectRatio: item.aspect,
+                transitionDelay: inView ? `${index * 80}ms` : "0ms",
               }}
             >
-              {/* Image container */}
-              <div className="relative aspect-[3/4] overflow-hidden">
-                <img
-                  src={item.src}
-                  alt={item.alt}
-                  loading="lazy"
-                  className="h-full w-full object-cover
-                    filter grayscale-[20%] contrast-[1.05]
-                    transition-all duration-[1.2s] ease-out
-                    group-hover:scale-[1.06] group-hover:grayscale-0"
-                />
-
-                {/* Cinematic overlays */}
-                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-[#050505]/20 opacity-80" />
-                <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-[#050505]/30 via-transparent to-transparent" />
-
-                {/* Decorative corner border */}
-                <div
-                  className="absolute top-4 left-4 w-10 h-10 pointer-events-none
-                    border-t border-l border-white/0
-                    transition-all duration-500
-                    group-hover:border-white/30 group-hover:w-14 group-hover:h-14"
-                />
-                <div
-                  className="absolute bottom-4 right-4 w-10 h-10 pointer-events-none
-                    border-b border-r border-white/0
-                    transition-all duration-500
-                    group-hover:border-white/30 group-hover:w-14 group-hover:h-14"
-                />
-
-                {/* "Ver" badge */}
-                <div
-                  className="absolute top-5 right-5 z-10
-                    opacity-0 translate-y-2
-                    transition-all duration-400
-                    group-hover:opacity-100 group-hover:translate-y-0"
-                >
-                  <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/50 backdrop-blur-md px-4 py-2 text-[0.6rem] font-semibold uppercase tracking-[0.2em] text-white/80">
-                    Ver serie
-                    <svg width="10" height="10" viewBox="0 0 14 14" fill="none">
-                      <path
-                        d="M2 7h10M8 3l4 4-4 4"
-                        stroke="currentColor"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </span>
-                </div>
-
-                {/* Caption */}
-                <figcaption className="absolute bottom-0 left-0 right-0 p-6 z-10">
-                  <p className="text-[0.6rem] uppercase tracking-[0.22em] text-white/40 mb-1">
-                    Servicio
-                  </p>
-                  <p
-                    className="vt-title-serif text-xl md:text-2xl font-light text-white mb-2
-                      transition-transform duration-500 group-hover:translate-x-2"
-                  >
-                    {item.label}
-                  </p>
-                  <p
-                    className="text-xs text-white/40 leading-relaxed max-w-[18rem]
-                      opacity-0 translate-y-3
-                      transition-all duration-500 delay-100
-                      group-hover:opacity-100 group-hover:translate-y-0"
-                  >
-                    {item.description}
-                  </p>
-                </figcaption>
-              </div>
-
-              {/* Offset decorative border */}
-              <div
-                className="absolute inset-0 pointer-events-none
-                  border border-white/0
-                  transition-all duration-700
-                  group-hover:inset-[-6px] group-hover:border-white/[0.08]"
+              <img
+                src={item.src}
+                alt={item.title}
+                loading="lazy"
+                className="gallery-image"
               />
-            </MotionLink>
+
+              <div className="gallery-overlay">
+                <span className="gallery-chip">{item.chip}</span>
+                <span className="gallery-expand">
+                  <Maximize2 className="h-[18px] w-[18px]" />
+                </span>
+                <h3 className="gallery-title">{item.title}</h3>
+                <span className="gallery-line" />
+              </div>
+            </button>
           ))}
         </div>
       </div>
+
+      {isLightboxOpen && currentItem && (
+        <div className="gallery-lightbox" role="dialog" aria-modal="true">
+          <div className="gallery-lightbox-backdrop" onClick={closeLightbox} />
+          <div className="gallery-lightbox-panel" onClick={(e) => e.stopPropagation()}>
+            <button
+              type="button"
+              className="gallery-lightbox-close"
+              onClick={closeLightbox}
+              aria-label="Close preview"
+            >
+              <X className="h-5 w-5" />
+            </button>
+            <button
+              type="button"
+              className="gallery-lightbox-nav gallery-lightbox-prev"
+              onClick={goPrev}
+              aria-label="Previous image"
+            >
+              <ChevronLeft className="h-5 w-5" />
+            </button>
+            <img
+              src={currentItem.src}
+              alt={currentItem.title}
+              className="gallery-lightbox-image"
+            />
+            <button
+              type="button"
+              className="gallery-lightbox-nav gallery-lightbox-next"
+              onClick={goNext}
+              aria-label="Next image"
+            >
+              <ChevronRight className="h-5 w-5" />
+            </button>
+          </div>
+        </div>
+      )}
     </section>
   );
 };

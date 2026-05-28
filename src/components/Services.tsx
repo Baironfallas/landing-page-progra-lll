@@ -1,147 +1,153 @@
-import { useState, useEffect, useRef } from "react";
-import { MdCamera } from "react-icons/md";
-import { PiDroneLight, PiDroneFill } from "react-icons/pi";
-import { IoCalendarNumberSharp } from "react-icons/io5";
+import { useEffect, useRef, useState } from "react";
+import {
+  Aperture,
+  Briefcase,
+  Calendar,
+  Film,
+  Sliders,
+  Wind,
+} from "lucide-react";
 
 const services = [
   {
-    num: "01",
-    title: "Fotografía Profesional",
-    Icon: MdCamera,
-    tag: "Retratos · Moda · Producto",
-    desc: "Imágenes de alta calidad para eventos, retratos, productos y publicidad, adaptadas con precisión a cada narrativa visual.",
+    number: "01",
+    title: "Portrait Photography",
+    description:
+      "Editorial portraiture with refined lighting, styling, and timeless direction.",
+    Icon: Aperture,
   },
   {
-    num: "02",
-    title: "Fotografía con Dron",
-    Icon: PiDroneLight,
-    tag: "Aérea · Arquitectura",
-    desc: "Perspectivas aéreas únicas que transforman cualquier escenario en una composición cinematográfica de gran impacto.",
+    number: "02",
+    title: "Event Coverage",
+    description:
+      "Discreet, cinematic documentation for private and corporate events.",
+    Icon: Calendar,
   },
   {
-    num: "03",
-    title: "Videos con Dron",
-    Icon: PiDroneFill,
-    tag: "Eventos · Promo · Aérea",
-    desc: "Secuencias aéreas dinámicas y fluidas, ideales para elevar la producción de eventos, marcas y proyectos visuales.",
+    number: "03",
+    title: "Commercial & Branding",
+    description:
+      "Campaign-ready visuals built to elevate brands and product storytelling.",
+    Icon: Briefcase,
   },
   {
-    num: "04",
-    title: "Cobertura de Eventos",
-    Icon: IoCalendarNumberSharp,
-    tag: "Bodas · Corp · Fiestas",
-    desc: "Documentamos cada momento con autenticidad: bodas, eventos corporativos y celebraciones que merecen ser recordadas.",
+    number: "04",
+    title: "Drone Cinematography",
+    description:
+      "Aerial perspectives with smooth motion and cinematic depth of field.",
+    Icon: Wind,
+  },
+  {
+    number: "05",
+    title: "Video Production",
+    description:
+      "Concept-to-edit production for brand films, promos, and visual essays.",
+    Icon: Film,
+  },
+  {
+    number: "06",
+    title: "Photo Editing & Retouching",
+    description:
+      "High-end retouching, color grading, and tonal consistency for every frame.",
+    Icon: Sliders,
   },
 ];
 
-const useInView = (threshold = 0.15) => {
-  const ref = useRef(null);
+const Services = () => {
+  const sectionRef = useRef<HTMLElement | null>(null);
   const [inView, setInView] = useState(false);
+
   useEffect(() => {
-    const obs = new IntersectionObserver(
-      ([e]) => {
-        if (e.isIntersecting) {
+    if (!sectionRef.current) return undefined;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
           setInView(true);
-          obs.disconnect();
+          observer.disconnect();
         }
       },
-      { threshold },
+      { threshold: 0.2 },
     );
-    if (ref.current) obs.observe(ref.current);
-    return () => obs.disconnect();
-  }, [threshold]);
-  return [ref, inView];
-};
 
-const Services = () => {
-  const [sectionRef, inView] = useInView(0.1) as [
-    React.RefObject<HTMLElement>,
-    boolean,
-  ];
-  const [, setHovered] = useState<number | null>(null);
+    observer.observe(sectionRef.current);
+
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <section
       id="Services"
-      className="srv-section vt-section-divider"
       ref={sectionRef}
+      className="vt-section-dark vt-section-divider"
     >
-      <div className="srv-inner">
-        {/* Header */}
-        <header className="srv-header">
-          <div className="srv-header-left">
-            <div className={`srv-eyebrow ${inView ? "show" : ""}`}>
-              <div className="eyebrow-dash" />
-              <span className="eyebrow-text">Lo que hacemos</span>
-            </div>
-            <h2 className={`srv-title ${inView ? "show" : ""}`}>
-              Nuestros <em>Servicios</em>
+      <div className="vt-content-layer mx-auto max-w-7xl px-6 vt-section-pad">
+        <div className="grid items-end gap-8 lg:grid-cols-[1.05fr_0.95fr]">
+          <div>
+            <p className="font-[Montserrat] text-[10px] uppercase tracking-[0.4em] text-white/40">
+              What We Do
+            </p>
+            <h2 className="mt-4 vt-title-serif text-[clamp(40px,5vw,68px)] leading-[0.98] text-white">
+              Services Built for
+              <br />
+              <em className="italic text-[#F5D08B] font-normal">
+                Every Frame.
+              </em>
             </h2>
           </div>
-          <div className={`srv-header-right ${inView ? "show" : ""}`}>
-            <p className="srv-header-desc">
-              Cada proyecto es una historia única. Trabajamos con precisión y
-              sensibilidad artística para capturar lo que las palabras no
-              pueden.
-            </p>
-          </div>
-        </header>
-
-        {/* Grid */}
-        <div className="srv-grid">
-          {services.map(({ num, title, Icon, tag, desc }, i) => (
-            <article
-              key={num}
-              className={`srv-card ${inView ? "show" : ""}`}
-              style={{ transitionDelay: inView ? `${0.3 + i * 0.1}s` : "0s" }}
-              onMouseEnter={() => setHovered(i)}
-              onMouseLeave={() => setHovered(null)}
-            >
-              <div className="srv-card-bg" />
-              <div className="srv-card-accent" />
-
-              <div className="srv-card-inner">
-                <div className="srv-card-top">
-                  <span className="srv-card-num">{num}</span>
-                  <div className="srv-icon-wrap">
-                    <Icon />
-                  </div>
-                </div>
-
-                <div className="srv-card-body">
-                  <span className="srv-card-tag">{tag}</span>
-                  <h3 className="srv-card-title">{title}</h3>
-                  <p className="srv-card-desc">{desc}</p>
-                </div>
-
-                <div className="srv-card-footer">
-                  <span className="srv-card-link">Ver más</span>
-                  <div className="srv-card-arrow" />
-                </div>
-              </div>
-            </article>
-          ))}
+          <p className="font-[Montserrat] text-[14px] font-light leading-[1.7] text-white/55 max-w-xl">
+            A curated suite of services shaped for editorial portraits, premium
+            campaigns, and cinematic storytelling across every medium.
+          </p>
         </div>
 
-        {/* Bottom bar */}
-        <div className={`srv-bottom ${inView ? "show" : ""}`}>
-          <div className="srv-bottom-line" />
-          <span className="srv-bottom-text">
-            Disponible para nuevos proyectos
-          </span>
-          <div className="srv-bottom-line" />
-          <button className="srv-cta-btn">
-            Consulta gratuita
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-              <path
-                d="M1 6h10M7 2l4 4-4 4"
-                stroke="currentColor"
-                strokeWidth="1.1"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </button>
+        <div
+          className="mt-14 border"
+          style={{ borderColor: "rgba(255, 255, 255, 0.08)" }}
+        >
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-[#050505]">
+            {services.map((service, index) => {
+              const Icon = service.Icon;
+              return (
+                <button
+                  key={service.number}
+                  type="button"
+                  className={[
+                    "group relative cursor-pointer overflow-hidden bg-white/[0.03]",
+                    "px-8 py-10 text-left transition-colors duration-300",
+                    "hover:bg-white/[0.07] focus-visible:outline-none",
+                    "focus-visible:ring-1 focus-visible:ring-[#F5D08B]/70",
+                    inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5",
+                  ].join(" ")}
+                  style={{
+                    transitionDelay: inView ? `${index * 80}ms` : "0ms",
+                  }}
+                >
+                  <span className="absolute right-5 top-4 vt-title-serif text-[72px] font-light text-white/[0.04] transition-colors duration-[400ms] group-hover:text-white/[0.08]">
+                    {service.number}
+                  </span>
+
+                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-[#7BD0C4]/10 text-[#7BD0C4] transition-transform duration-300 group-hover:scale-110">
+                    <Icon className="h-6 w-6" />
+                  </div>
+
+                  <h3 className="mt-4 vt-title-serif text-[22px] font-medium text-white">
+                    {service.title}
+                  </h3>
+
+                  <p className="mt-3 max-w-[22rem] font-[Montserrat] text-[13px] font-light leading-[1.6] text-white/55">
+                    {service.description}
+                  </p>
+
+                  <span className="mt-6 inline-flex items-center font-[Montserrat] text-[11px] uppercase tracking-[0.15em] text-[#F5D08B] opacity-0 -translate-x-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0">
+                    Learn more →
+                  </span>
+
+                  <span className="absolute bottom-0 left-0 right-0 h-px origin-left scale-x-0 bg-[#F5D08B] transition-transform duration-300 group-hover:scale-x-100" />
+                </button>
+              );
+            })}
+          </div>
         </div>
       </div>
     </section>

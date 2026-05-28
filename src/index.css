@@ -398,6 +398,124 @@ body {
   transition: color 0.3s;
   font-family: var(--vt-font-sans);
 }
+
+/* ═══════════════════════════════════════════
+   HERO LUXE EDITORIAL
+   ═══════════════════════════════════════════ */
+
+.hero-luxe-left {
+  opacity: 0;
+  transform: translateX(-32px);
+}
+
+.hero-luxe-left.is-visible {
+  animation: hero-luxe-left 0.6s ease forwards;
+}
+
+.hero-luxe-right {
+  opacity: 0;
+  transform: translateY(16px) scale(0.96);
+}
+
+.hero-luxe-right.is-visible {
+  animation: hero-luxe-right 0.6s ease forwards 0.2s;
+}
+
+.hero-luxe-line {
+  display: block;
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.hero-luxe-line.is-visible {
+  animation: hero-luxe-line 0.6s ease forwards;
+}
+
+.hero-luxe-sub {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.hero-luxe-sub.is-visible {
+  animation: hero-luxe-sub 0.6s ease forwards;
+}
+
+.hero-luxe-parallax {
+  will-change: transform;
+}
+
+.hero-luxe-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  max-height: 85vh;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.hero-luxe-badge {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 1.5rem;
+  width: 80px;
+  height: 80px;
+  border-radius: 9999px;
+  background: rgba(5, 5, 5, 0.8);
+  border: 1px solid rgba(245, 208, 139, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #f5d08b;
+}
+
+.hero-luxe-badge-text {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  animation: hero-luxe-spin 20s linear infinite;
+}
+
+.hero-luxe-badge-icon {
+  width: 16px;
+  height: 16px;
+}
+
+@keyframes hero-luxe-left {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes hero-luxe-right {
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes hero-luxe-line {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes hero-luxe-sub {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes hero-luxe-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
 .btn-link:hover {
   color: var(--vt-color-text-bright);
 }

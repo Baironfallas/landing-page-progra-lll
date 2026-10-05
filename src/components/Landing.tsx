@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router";
+import { FaInstagram } from "react-icons/fa";
 import { galleryItems } from "../data/galleryData";
+import BookingForm from "./BookingForm";
 
 const aboutImg =
   "https://images.unsplash.com/photo-1554080353-a576cf803bda?auto=format&fit=crop&w=1200&q=80";
@@ -88,6 +90,37 @@ const testimonials = [
       "Entendió nuestra marca desde la primera reunión. Las imágenes elevaron por completo nuestra presencia digital.",
   },
 ];
+
+const faqs = [
+  {
+    question: "¿Cuánto tiempo tardan en estar listas las fotos?",
+    answer:
+      "Las sesiones de retrato se entregan en 7 a 10 días hábiles. Las bodas, entre 4 y 6 semanas, con un adelanto de 20 fotos durante la primera semana.",
+  },
+  {
+    question: "¿Cómo reservo una fecha?",
+    answer:
+      "Escríbeme por el formulario con la fecha tentativa. Si está disponible, la fecha queda apartada con un adelanto del 30 % y un contrato sencillo.",
+  },
+  {
+    question: "¿Viajas fuera de la ciudad?",
+    answer:
+      "Sí. Trabajo en todo el país y también en el extranjero. Los gastos de traslado y hospedaje se cotizan aparte según el destino.",
+  },
+  {
+    question: "¿Qué me pongo para la sesión?",
+    answer:
+      "Antes de la sesión te envío una guía de vestuario. En general recomiendo tonos neutros, texturas naturales y ropa con la que te sientas tú.",
+  },
+  {
+    question: "¿Entregas los archivos originales sin editar?",
+    answer:
+      "No. Cada imagen entregada pasa por una edición cuidada para mantener un estilo coherente. Sí puedes elegir más fotos de la selección final.",
+  },
+];
+
+const instagramUrl = "https://www.instagram.com/";
+const instagramShots = galleryItems.flatMap((item) => item.gallery.slice(1, 2)).slice(0, 6);
 
 const Landing = () => {
   const [activeFilter, setActiveFilter] = useState("Todos");
@@ -354,23 +387,119 @@ const Landing = () => {
         </div>
       </section>
 
-      {/* CTA */}
-      <section id="contacto" className="relative flex h-[50vh] min-h-[360px] items-center justify-center overflow-hidden text-center">
+      {/* FAQ */}
+      <section id="preguntas" className="mx-auto max-w-7xl px-6 py-24 md:px-10">
+        <div className="grid gap-12 md:grid-cols-[1fr_1.6fr]">
+          <div>
+            <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.32em] text-white/40">
+              Preguntas frecuentes
+            </p>
+            <h2 className="font-[Cormorant_Garamond] text-[34px] font-light leading-tight text-white md:text-[42px]">
+              Lo que suelen
+              <br />
+              preguntarme.
+            </h2>
+            <p className="mt-6 max-w-xs text-[14px] leading-relaxed text-white/55">
+              ¿Tienes otra duda? Escríbeme y te respondo personalmente.
+            </p>
+          </div>
+
+          <div className="border-t border-white/10">
+            {faqs.map(({ question, answer }) => (
+              <details key={question} className="group border-b border-white/10">
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-6 py-6 text-[15px] text-white/85 transition-colors hover:text-white [&::-webkit-details-marker]:hidden">
+                  {question}
+                  <span className="relative h-3 w-3 shrink-0">
+                    <span className="absolute left-0 top-1/2 h-px w-3 bg-white/60" />
+                    <span className="absolute left-1/2 top-0 h-3 w-px bg-white/60 transition-transform duration-300 group-open:rotate-90" />
+                  </span>
+                </summary>
+                <p className="max-w-xl pb-6 text-[14px] leading-relaxed text-white/55">{answer}</p>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Contact */}
+      <section id="contacto" className="relative overflow-hidden">
         <img
           src={ctaBg}
-          alt="Furgoneta en camino desértico"
-          className="absolute inset-0 h-full w-full object-cover brightness-[0.35] grayscale"
+          alt=""
+          className="absolute inset-0 h-full w-full object-cover brightness-[0.2] grayscale"
         />
-        <div className="relative z-[1] px-6">
-          <h2 className="font-[Cormorant_Garamond] text-[32px] font-light uppercase tracking-[0.05em] text-white md:text-[46px]">
-            Hagamos algo extraordinario
-          </h2>
+        <div className="absolute inset-0 bg-gradient-to-b from-[#050505] via-transparent to-[#050505]" />
+
+        <div className="relative z-[1] mx-auto grid max-w-7xl gap-14 px-6 py-28 md:grid-cols-[1fr_1.4fr] md:px-10">
+          <div>
+            <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.32em] text-white/40">
+              Contacto
+            </p>
+            <h2 className="font-[Cormorant_Garamond] text-[36px] font-light uppercase leading-[1.1] text-white md:text-[50px]">
+              Hagamos algo
+              <br />
+              extraordinario
+            </h2>
+            <p className="mt-6 max-w-sm text-[14px] leading-relaxed text-white/55">
+              Cuéntame qué tienes en mente. Respondo todos los mensajes en
+              menos de 48 horas.
+            </p>
+            <ul className="mt-10 space-y-3 text-[12px] uppercase tracking-[0.2em] text-white/50">
+              <li>
+                <a href="mailto:hola@daylanifallas.com" className="transition-colors hover:text-white">
+                  hola@daylanifallas.com
+                </a>
+              </li>
+              <li>San José, Costa Rica</li>
+            </ul>
+          </div>
+
+          <BookingForm />
+        </div>
+      </section>
+
+      {/* Instagram */}
+      <section className="py-20">
+        <div className="mx-auto mb-8 flex max-w-7xl items-end justify-between px-6 md:px-10">
+          <div>
+            <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.32em] text-white/40">
+              Detrás de cámara
+            </p>
+            <h2 className="font-[Cormorant_Garamond] text-[28px] font-light text-white md:text-[34px]">
+              @daylanifallas
+            </h2>
+          </div>
           <a
-            href="mailto:hola@daylanifallas.com"
-            className="mt-8 inline-flex items-center border border-white/40 px-7 py-3 text-[11px] font-medium uppercase tracking-[0.22em] text-white transition-colors hover:bg-white hover:text-black"
+            href={instagramUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.22em] text-white/60 transition-colors hover:text-white"
           >
-            Escríbeme
+            <FaInstagram className="h-4 w-4" />
+            <span className="hidden sm:inline">Seguir en Instagram</span>
           </a>
+        </div>
+
+        <div className="grid grid-cols-3 gap-1 md:grid-cols-6">
+          {instagramShots.map(({ src, alt }) => (
+            <a
+              key={src}
+              href={instagramUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="group relative block aspect-square overflow-hidden"
+            >
+              <img
+                src={src}
+                alt={alt}
+                loading="lazy"
+                className="h-full w-full object-cover grayscale transition-all duration-500 group-hover:scale-105 group-hover:grayscale-0"
+              />
+              <span className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                <FaInstagram className="h-5 w-5 text-white" />
+              </span>
+            </a>
+          ))}
         </div>
       </section>
     </>
